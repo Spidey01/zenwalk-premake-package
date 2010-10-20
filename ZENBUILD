@@ -1,0 +1,43 @@
+#Maintainer: Terry M. Poulin <BigBoss1964@gmail.com>
+#
+# Please report any issues with this package via Github:
+#
+# 	http://github.com/Spidey01/zenwalk-premake-package/issues
+#
+# If you must send an E-Mail, prefix the subject line with the package name, or
+# some other means of identifying it as NON-SPAM.
+
+pkgname=premake
+pkgver=4.2.1
+pkgrel=1
+zenver=66
+arch=i486
+source=("http://sourceforge.net/projects/${pkgname}/files/Premake/${pkgver}/${pkgname}-${pkgver}-src.zip")
+sourcetemplate="http://dl.dropbox.com/u/7012687/zenwalk/packages/${pkgname}"
+docs=("AUTHORS" "README" "INSTALL" "LICENSE" "THANKS")
+docs=("BUILD.txt" "LICENSE.txt" "CHANGES.txt" "README.txt")
+url="http://industriousone.com/premake"
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"$pkgname - powerfully simple build configuration"
+""
+"Describe your software project just once, using Premake's simple and"
+"easy to read syntax, and build it everywhere. Generate project files"
+"for Visual Studio, GNU Make, Xcode, Code::Blocks, and more across"
+"Windows, Mac OS X, and Linux.  Use the full featured Lua scripting"
+"engine to make build configuration tasks a breeze."
+)
+
+build() {
+	cd "$startdir/src/$pkgname-$pkgver/build/gmake.unix"
+
+	./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc \
+	            --mandir=/usr/man
+
+	make || return 1
+
+	mkdir -p "${startdir}/pkg/usr/bin" && \
+		install -ps ../../bin/release/premake4 "${startdir}/pkg/usr/bin"
+} 
